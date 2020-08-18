@@ -1,4 +1,4 @@
-package net.roguelogix.phosphophyllite.quartz_old.internal.shaders;
+package net.roguelogix.phosphophyllite.quartz.client.gl21java;
 
 import net.minecraft.util.ResourceLocation;
 

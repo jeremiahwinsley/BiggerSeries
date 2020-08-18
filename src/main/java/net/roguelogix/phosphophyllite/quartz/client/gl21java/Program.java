@@ -1,10 +1,9 @@
-package net.roguelogix.phosphophyllite.quartz_old.internal.shaders;
+package net.roguelogix.phosphophyllite.quartz.client.gl21java;
 
 import net.minecraft.util.ResourceLocation;
 import net.roguelogix.phosphophyllite.Phosphophyllite;
 import net.roguelogix.phosphophyllite.threading.Event;
 
-import static net.roguelogix.phosphophyllite.quartz_old.internal.Renderer.secondaryWorkQueue;
 import static net.roguelogix.phosphophyllite.util.Util.readResourceLocation;
 import static org.lwjgl.opengl.GL21.*;
 
@@ -27,7 +26,7 @@ public class Program {
     }
     
     public Event reload() {
-        return secondaryWorkQueue.enqueue(() -> {
+        return QuartzRendererGL21Java.INSTANCE.secondaryQueue.enqueue(() -> {
             int newHandle = load(location);
             if (newHandle != 0) {
                 unload(handle);
@@ -115,7 +114,7 @@ public class Program {
     }
     
     private static void unload(int handle) {
-        secondaryWorkQueue.enqueue(() -> glDeleteProgram(handle));
+        QuartzRendererGL21Java.INSTANCE.secondaryQueue.enqueue(() -> glDeleteProgram(handle));
     }
     
 }
