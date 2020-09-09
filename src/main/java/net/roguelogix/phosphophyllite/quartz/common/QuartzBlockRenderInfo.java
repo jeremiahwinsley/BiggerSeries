@@ -51,41 +51,41 @@ public class QuartzBlockRenderInfo implements ROBNObject {
     public byte lightmapBlocklightEastHYHZ = 0x3F;
     public byte lightmapSkylightEastHYHZ = 0x3F;
     
-    public byte lightmapBlocklightTopLYLZ = 0x3F;
-    public byte lightmapSkylightTopLYLZ = 0x3F;
-    public byte lightmapBlocklightTopHYLZ = 0x3F;
-    public byte lightmapSkylightTopHYLZ = 0x3F;
-    public byte lightmapBlocklightTopLYHZ = 0x3F;
-    public byte lightmapSkylightTopLYHZ = 0x3F;
-    public byte lightmapBlocklightTopHYHZ = 0x3F;
-    public byte lightmapSkylightTopHYHZ = 0x3F;
+    public byte lightmapBlocklightTopLXLZ = 0x3F;
+    public byte lightmapSkylightTopLXLZ = 0x3F;
+    public byte lightmapBlocklightTopHXLZ = 0x3F;
+    public byte lightmapSkylightTopHXLZ = 0x3F;
+    public byte lightmapBlocklightTopLXHZ = 0x3F;
+    public byte lightmapSkylightTopLXHZ = 0x3F;
+    public byte lightmapBlocklightTopHXHZ = 0x3F;
+    public byte lightmapSkylightTopHXHZ = 0x3F;
     
-    public byte lightmapBlocklightBottomLYLZ = 0x3F;
-    public byte lightmapSkylightBottomLYLZ = 0x3F;
-    public byte lightmapBlocklightBottomHYLZ = 0x3F;
-    public byte lightmapSkylightBottomHYLZ = 0x3F;
-    public byte lightmapBlocklightBottomLYHZ = 0x3F;
-    public byte lightmapSkylightBottomLYHZ = 0x3F;
-    public byte lightmapBlocklightBottomHYHZ = 0x3F;
-    public byte lightmapSkylightBottomHYHZ = 0x3F;
+    public byte lightmapBlocklightBottomLXLZ = 0x3F;
+    public byte lightmapSkylightBottomLXLZ = 0x3F;
+    public byte lightmapBlocklightBottomHXLZ = 0x3F;
+    public byte lightmapSkylightBottomHXLZ = 0x3F;
+    public byte lightmapBlocklightBottomLXHZ = 0x3F;
+    public byte lightmapSkylightBottomLXHZ = 0x3F;
+    public byte lightmapBlocklightBottomHXHZ = 0x3F;
+    public byte lightmapSkylightBottomHXHZ = 0x3F;
     
-    public byte lightmapBlocklightSouthLYLZ = 0x3F;
-    public byte lightmapSkylightSouthLYLZ = 0x3F;
-    public byte lightmapBlocklightSouthHYLZ = 0x3F;
-    public byte lightmapSkylightSouthHYLZ = 0x3F;
-    public byte lightmapBlocklightSouthLYHZ = 0x3F;
-    public byte lightmapSkylightSouthLYHZ = 0x3F;
-    public byte lightmapBlocklightSouthHYHZ = 0x3F;
-    public byte lightmapSkylightSouthHYHZ = 0x3F;
+    public byte lightmapBlocklightSouthLXLY = 0x3F;
+    public byte lightmapSkylightSouthLXLY = 0x3F;
+    public byte lightmapBlocklightSouthHXLY = 0x3F;
+    public byte lightmapSkylightSouthHXLY = 0x3F;
+    public byte lightmapBlocklightSouthLXHY = 0x3F;
+    public byte lightmapSkylightSouthLXHY = 0x3F;
+    public byte lightmapBlocklightSouthHXHY = 0x3F;
+    public byte lightmapSkylightSouthHXHY = 0x3F;
     
-    public byte lightmapBlocklightNorthLYLZ = 0x3F;
-    public byte lightmapSkylightNorthLYLZ = 0x3F;
-    public byte lightmapBlocklightNorthHYLZ = 0x3F;
-    public byte lightmapSkylightNorthHYLZ = 0x3F;
-    public byte lightmapBlocklightNorthLYHZ = 0x3F;
-    public byte lightmapSkylightNorthLYHZ = 0x3F;
-    public byte lightmapBlocklightNorthHYHZ = 0x3F;
-    public byte lightmapSkylightNorthHYHZ = 0x3F;
+    public byte lightmapBlocklightNorthLXLY = 0x3F;
+    public byte lightmapSkylightNorthLXLY = 0x3F;
+    public byte lightmapBlocklightNorthHXLY = 0x3F;
+    public byte lightmapSkylightNorthHXLY = 0x3F;
+    public byte lightmapBlocklightNorthLXHY = 0x3F;
+    public byte lightmapSkylightNorthLXHY = 0x3F;
+    public byte lightmapBlocklightNorthHXHY = 0x3F;
+    public byte lightmapSkylightNorthHXHY = 0x3F;
     
     @Override
     public Map<String, Object> toROBNMap() {
@@ -93,6 +93,13 @@ public class QuartzBlockRenderInfo implements ROBNObject {
         map.put("x", x);
         map.put("y", y);
         map.put("z", z);
+    
+        map.put("textureIDWest", textureIDWest);
+        map.put("textureIDEast", textureIDEast);
+        map.put("textureIDBottom", textureIDBottom);
+        map.put("textureIDTop", textureIDTop);
+        map.put("textureIDSouth", textureIDSouth);
+        map.put("textureIDNorth", textureIDNorth);
         
         map.put("textureRotationWest", textureRotationWest);
         map.put("textureRotationEast", textureRotationEast);
@@ -119,41 +126,41 @@ public class QuartzBlockRenderInfo implements ROBNObject {
         map.put("lightmapBlocklightEastHYHZ", lightmapBlocklightEastHYHZ);
         map.put("lightmapSkylightEastHYHZ", lightmapSkylightEastHYHZ);
         
-        map.put("lightmapBlocklightTopLYLZ", lightmapBlocklightTopLYLZ);
-        map.put("lightmapSkylightTopLYLZ", lightmapSkylightTopLYLZ);
-        map.put("lightmapBlocklightTopHYLZ", lightmapBlocklightTopHYLZ);
-        map.put("lightmapSkylightTopHYLZ", lightmapSkylightTopHYLZ);
-        map.put("lightmapBlocklightTopLYHZ", lightmapBlocklightTopLYHZ);
-        map.put("lightmapSkylightTopLYHZ", lightmapSkylightTopLYHZ);
-        map.put("lightmapBlocklightTopHYHZ", lightmapBlocklightTopHYHZ);
-        map.put("lightmapSkylightTopHYHZ", lightmapSkylightTopHYHZ);
+        map.put("lightmapBlocklightTopLXLZ", lightmapBlocklightTopLXLZ);
+        map.put("lightmapSkylightTopLXLZ", lightmapSkylightTopLXLZ);
+        map.put("lightmapBlocklightTopHXLZ", lightmapBlocklightTopHXLZ);
+        map.put("lightmapSkylightTopHXLZ", lightmapSkylightTopHXLZ);
+        map.put("lightmapBlocklightTopLXHZ", lightmapBlocklightTopLXHZ);
+        map.put("lightmapSkylightTopLXHZ", lightmapSkylightTopLXHZ);
+        map.put("lightmapBlocklightTopHXHZ", lightmapBlocklightTopHXHZ);
+        map.put("lightmapSkylightTopHXHZ", lightmapSkylightTopHXHZ);
         
-        map.put("lightmapBlocklightBottomLYLZ", lightmapBlocklightBottomLYLZ);
-        map.put("lightmapSkylightBottomLYLZ", lightmapSkylightBottomLYLZ);
-        map.put("lightmapBlocklightBottomHYLZ", lightmapBlocklightBottomHYLZ);
-        map.put("lightmapSkylightBottomHYLZ", lightmapSkylightBottomHYLZ);
-        map.put("lightmapBlocklightBottomLYHZ", lightmapBlocklightBottomLYHZ);
-        map.put("lightmapSkylightBottomLYHZ", lightmapSkylightBottomLYHZ);
-        map.put("lightmapBlocklightBottomHYHZ", lightmapBlocklightBottomHYHZ);
-        map.put("lightmapSkylightBottomHYHZ", lightmapSkylightBottomHYHZ);
+        map.put("lightmapBlocklightBottomLXLZ", lightmapBlocklightBottomLXLZ);
+        map.put("lightmapSkylightBottomLXLZ", lightmapSkylightBottomLXLZ);
+        map.put("lightmapBlocklightBottomHXLZ", lightmapBlocklightBottomHXLZ);
+        map.put("lightmapSkylightBottomHXLZ", lightmapSkylightBottomHXLZ);
+        map.put("lightmapBlocklightBottomLXHZ", lightmapBlocklightBottomLXHZ);
+        map.put("lightmapSkylightBottomLXHZ", lightmapSkylightBottomLXHZ);
+        map.put("lightmapBlocklightBottomHXHZ", lightmapBlocklightBottomHXHZ);
+        map.put("lightmapSkylightBottomHXHZ", lightmapSkylightBottomHXHZ);
         
-        map.put("lightmapBlocklightSouthLYLZ", lightmapBlocklightSouthLYLZ);
-        map.put("lightmapSkylightSouthLYLZ", lightmapSkylightSouthLYLZ);
-        map.put("lightmapBlocklightSouthHYLZ", lightmapBlocklightSouthHYLZ);
-        map.put("lightmapSkylightSouthHYLZ", lightmapSkylightSouthHYLZ);
-        map.put("lightmapBlocklightSouthLYHZ", lightmapBlocklightSouthLYHZ);
-        map.put("lightmapSkylightSouthLYHZ", lightmapSkylightSouthLYHZ);
-        map.put("lightmapBlocklightSouthHYHZ", lightmapBlocklightSouthHYHZ);
-        map.put("lightmapSkylightSouthHYHZ", lightmapSkylightSouthHYHZ);
+        map.put("lightmapBlocklightSouthLXLY", lightmapBlocklightSouthLXLY);
+        map.put("lightmapSkylightSouthLXLY", lightmapSkylightSouthLXLY);
+        map.put("lightmapBlocklightSouthHXLY", lightmapBlocklightSouthHXLY);
+        map.put("lightmapSkylightSouthHXLY", lightmapSkylightSouthHXLY);
+        map.put("lightmapBlocklightSouthLXHY", lightmapBlocklightSouthLXHY);
+        map.put("lightmapSkylightSouthLXHY", lightmapSkylightSouthLXHY);
+        map.put("lightmapBlocklightSouthHXHY", lightmapBlocklightSouthHXHY);
+        map.put("lightmapSkylightSouthHXHY", lightmapSkylightSouthHXHY);
         
-        map.put("lightmapBlocklightNorthLYLZ", lightmapBlocklightNorthLYLZ);
-        map.put("lightmapSkylightNorthLYLZ", lightmapSkylightNorthLYLZ);
-        map.put("lightmapBlocklightNorthHYLZ", lightmapBlocklightNorthHYLZ);
-        map.put("lightmapSkylightNorthHYLZ", lightmapSkylightNorthHYLZ);
-        map.put("lightmapBlocklightNorthLYHZ", lightmapBlocklightNorthLYHZ);
-        map.put("lightmapSkylightNorthLYHZ", lightmapSkylightNorthLYHZ);
-        map.put("lightmapBlocklightNorthHYHZ", lightmapBlocklightNorthHYHZ);
-        map.put("lightmapSkylightNorthHYHZ", lightmapSkylightNorthHYHZ);
+        map.put("lightmapBlocklightNorthLXLY", lightmapBlocklightNorthLXLY);
+        map.put("lightmapSkylightNorthLXLY", lightmapSkylightNorthLXLY);
+        map.put("lightmapBlocklightNorthHXLY", lightmapBlocklightNorthHXLY);
+        map.put("lightmapSkylightNorthHXLY", lightmapSkylightNorthHXLY);
+        map.put("lightmapBlocklightNorthLXHY", lightmapBlocklightNorthLXHY);
+        map.put("lightmapSkylightNorthLXHY", lightmapSkylightNorthLXHY);
+        map.put("lightmapBlocklightNorthHXHY", lightmapBlocklightNorthHXHY);
+        map.put("lightmapSkylightNorthHXHY", lightmapSkylightNorthHXHY);
         
         
         return map;

@@ -25,3 +25,5 @@ run
 forge*changelog.txt
 
 src/main/quartzpp/cmake-build-debug/
+/src/main/java/net/roguelogix/phosphophyllite/quartz/client/gl45cpp/JNI.class
+/src/main/resources/assets/phosphophyllite/libs

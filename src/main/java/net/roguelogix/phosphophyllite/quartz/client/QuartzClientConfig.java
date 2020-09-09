@@ -12,10 +12,11 @@ import net.roguelogix.phosphophyllite.config.PhosphophylliteConfig;
 public class QuartzClientConfig {
     
     public enum OperationMode{
-        GL21_JAVA
+        GL21_JAVA,
+        GL46_CPP,
     }
     
     @PhosphophylliteConfig.Value
-    public static OperationMode OPERATION_MODE = OperationMode.GL21_JAVA;
+    public static OperationMode OPERATION_MODE = OperationMode.GL46_CPP;
 }
 

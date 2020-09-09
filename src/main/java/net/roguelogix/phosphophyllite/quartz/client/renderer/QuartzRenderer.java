@@ -2,19 +2,27 @@ package net.roguelogix.phosphophyllite.quartz.client.renderer;
 
 import net.roguelogix.phosphophyllite.quartz.client.QuartzClientConfig;
 import net.roguelogix.phosphophyllite.quartz.client.gl21java.QuartzRendererGL21Java;
-import org.joml.Vector3i;
+import net.roguelogix.phosphophyllite.quartz.client.gl46cpp.QuartzRendererGL46CPP;
+import net.roguelogix.phosphophyllite.quartz.common.QuartzBlockRenderInfo;
+
+import java.util.ArrayList;
 
 public abstract class QuartzRenderer {
     
     public static QuartzRenderer INSTANCE = null;
     
     public static void create(){
-        //noinspection SwitchStatementWithTooFewBranches
+        if(INSTANCE != null){
+            throw new IllegalStateException();
+        }
         switch (QuartzClientConfig.OPERATION_MODE){
             case GL21_JAVA:{
                 INSTANCE = new QuartzRendererGL21Java();
                 break;
             }
+            case GL46_CPP:
+                INSTANCE = new QuartzRendererGL46CPP();
+                break;
         }
     }
     
@@ -27,5 +35,7 @@ public abstract class QuartzRenderer {
     
     public abstract void GLShutdown();
     
-    public abstract void setBlockRenderInfo(IRenderChunkSection.BlockRenderInfo info, Vector3i position);
+    public abstract void setBlockRenderInfo(ArrayList<QuartzBlockRenderInfo> info);
+    
+    public abstract int loadTexture(String textureLocation);
 }

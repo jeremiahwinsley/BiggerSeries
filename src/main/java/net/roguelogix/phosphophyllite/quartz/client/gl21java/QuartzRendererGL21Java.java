@@ -2,8 +2,10 @@ package net.roguelogix.phosphophyllite.quartz.client.gl21java;
 
 import net.roguelogix.phosphophyllite.quartz.client.renderer.IRenderChunkSection;
 import net.roguelogix.phosphophyllite.quartz.client.renderer.QuartzRenderer;
+import net.roguelogix.phosphophyllite.quartz.common.QuartzBlockRenderInfo;
 import net.roguelogix.phosphophyllite.threading.WorkQueue;
-import org.joml.Vector3i;
+
+import java.util.ArrayList;
 
 public class QuartzRendererGL21Java extends QuartzRenderer {
     
@@ -34,7 +36,12 @@ public class QuartzRendererGL21Java extends QuartzRenderer {
     }
     
     @Override
-    public void setBlockRenderInfo(IRenderChunkSection.BlockRenderInfo info, Vector3i position) {
+    public int loadTexture(String textureLocation) {
+        return 0;
+    }
+    
+    @Override
+    public void setBlockRenderInfo(ArrayList<QuartzBlockRenderInfo> info) {
     
     }
 }

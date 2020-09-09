@@ -182,18 +182,11 @@ publishing {
 }
 
 configurations {
-    compile.extendsFrom shaders
+    compile.extendsFrom prebuilds
 }
 
-task shaders {
+task prebuilds {
     exec {
-        workingDir './src/main/resources/assets/phosphophyllite/shaders/'
-        commandLine "python3", "process_shaders.py"
+        commandLine "python3", "./scripts/prebuilds.py"
     }
-//    proc.waitForProcessOutput()
-//    if(proc.exitValue() != 0){
-//        println(proc.getErrorStream().toString());
-//        throw new StopExecutionException("Shader preprocessing failed")
-//    }
-//    println(proc.getOut().toString());
 }

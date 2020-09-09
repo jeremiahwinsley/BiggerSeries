@@ -4,7 +4,7 @@ import net.minecraft.util.ResourceLocation;
 import net.roguelogix.phosphophyllite.Phosphophyllite;
 import net.roguelogix.phosphophyllite.threading.Event;
 
-import static net.roguelogix.phosphophyllite.util.Util.readResourceLocation;
+import static net.roguelogix.phosphophyllite.util.Util.readTextResourceLocation;
 import static org.lwjgl.opengl.GL21.*;
 
 public class Program {
@@ -44,8 +44,8 @@ public class Program {
         ResourceLocation vertexLocation = new ResourceLocation(location.getNamespace(), location.getPath() + ".vert");
         ResourceLocation fragmentLocation = new ResourceLocation(location.getNamespace(), location.getPath() + ".frag");
         
-        String vertexCode = readResourceLocation(vertexLocation);
-        String fragmentCode = readResourceLocation(fragmentLocation);
+        String vertexCode = readTextResourceLocation(vertexLocation);
+        String fragmentCode = readTextResourceLocation(fragmentLocation);
         
         if (vertexCode == null && fragmentCode == null) {
             Phosphophyllite.LOGGER.warn("No code found for shader " + location.toString());
