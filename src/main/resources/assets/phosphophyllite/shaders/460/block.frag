@@ -42,6 +42,6 @@ void main(){
         lightmapPos0 /= 16.0;
 
         //        lightmapPos0.x += 1;
-        vec4 lightmapColor = texture(lightmapTexture, lightmapPos0)
+        vec4 lightmapColor = texture(lightmapTexture, lightmapPos0);
     }
 }
