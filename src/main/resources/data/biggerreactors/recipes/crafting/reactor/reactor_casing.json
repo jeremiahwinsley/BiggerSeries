@@ -17,6 +17,7 @@
     }
   },
   "result": {
-    "item": "biggerreactors:reactor_casing"
+    "item": "biggerreactors:reactor_casing",
+    "count": 4
   }
 }

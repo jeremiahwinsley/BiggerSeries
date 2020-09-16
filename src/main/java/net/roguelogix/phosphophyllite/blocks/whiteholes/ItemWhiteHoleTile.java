@@ -1,5 +1,6 @@
 package net.roguelogix.phosphophyllite.blocks.whiteholes;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -45,11 +46,11 @@ public class ItemWhiteHoleTile extends TileEntity implements IItemHandler, ITick
     }
     
     @Override
-    public void read(CompoundNBT compound) {
+    public void read(BlockState state, CompoundNBT compound) {
         if (compound.contains("item")) {
             item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(compound.getString("item")));
         }
-        super.read(compound);
+        super.read(state, compound);
     }
     
     @Override
@@ -79,7 +80,7 @@ public class ItemWhiteHoleTile extends TileEntity implements IItemHandler, ITick
     
     @Override
     public int getSlots() {
-        return 0;
+        return 128;
     }
     
     @Nonnull
@@ -102,7 +103,7 @@ public class ItemWhiteHoleTile extends TileEntity implements IItemHandler, ITick
     
     @Override
     public int getSlotLimit(int slot) {
-        return 1;
+        return 64;
     }
     
     @Override

@@ -15,11 +15,12 @@ public abstract class QuartzRenderer {
         if(INSTANCE != null){
             throw new IllegalStateException();
         }
+        //noinspection SwitchStatementWithTooFewBranches
         switch (QuartzClientConfig.OPERATION_MODE){
-            case GL21_JAVA:{
-                INSTANCE = new QuartzRendererGL21Java();
-                break;
-            }
+//            case GL21_JAVA:{
+//                INSTANCE = new QuartzRendererGL21Java();
+//                break;
+//            }
             case GL46_CPP:
                 INSTANCE = new QuartzRendererGL46CPP();
                 break;

@@ -8,7 +8,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.roguelogix.phosphophyllite.gui.GuiSync;
 import net.roguelogix.phosphophyllite.multiblock.generic.MultiblockController;
 import net.roguelogix.phosphophyllite.multiblock.generic.MultiblockTile;
 import net.roguelogix.phosphophyllite.registry.Registry;
@@ -23,10 +22,19 @@ public class Phosphophyllite {
     public static final String modid = "phosphophyllite";
     
     public static final Logger LOGGER = LogManager.getLogger("Phosphophyllite/Main");
+    public static final ArrayList<MultiblockController> controllersToTick = new ArrayList<>();
+    public static final ArrayList<MultiblockTile> tilesToAttach = new ArrayList<>();
+    public static long lastTime = 0;
+    // used to ensure i dont tick things twice
+    private static long tick = 0;
     
     public Phosphophyllite() {
         Registry.onModLoad();
         MinecraftForge.EVENT_BUS.register(this);
+    }
+    
+    public static long tickNumber() {
+        return tick;
     }
     
     @SubscribeEvent
@@ -38,18 +46,6 @@ public class Phosphophyllite {
             }
         }
     }
-    
-    public static final ArrayList<MultiblockController> controllersToTick = new ArrayList<>();
-    public static final ArrayList<MultiblockTile> tilesToAttach = new ArrayList<>();
-    
-    // used to ensure i dont tick things twice
-    private static long tick = 0;
-    
-    public static long tickNumber() {
-        return tick;
-    }
-    
-    public static long lastTime = 0;
     
     @SubscribeEvent
     public void onTick(TickEvent.ServerTickEvent e) {
@@ -80,16 +76,6 @@ public class Phosphophyllite {
             if (toAttach != null) {
                 toAttach.attachToNeighbors();
             }
-        }
-    }
-    
-    @SubscribeEvent
-    public void GuiOpenEvent(GuiOpenEvent e) {
-        Screen gui = e.getGui();
-        if(gui != null){
-            System.out.println(gui.getClass().getSimpleName());
-        }else{
-            System.out.println("null gui");
         }
     }
 }

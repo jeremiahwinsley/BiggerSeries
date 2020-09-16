@@ -6,10 +6,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.roguelogix.biggerreactors.Config;
 import net.roguelogix.biggerreactors.classic.turbine.blocks.*;
+import net.roguelogix.biggerreactors.classic.turbine.state.TurbineActivity;
+import net.roguelogix.biggerreactors.classic.turbine.state.TurbineState;
 import net.roguelogix.biggerreactors.classic.turbine.tiles.*;
 import net.roguelogix.phosphophyllite.multiblock.generic.MultiblockTile;
 import net.roguelogix.phosphophyllite.multiblock.generic.ValidationError;
@@ -129,7 +130,7 @@ public class TurbineMultiblockController extends RectangularMultiblockController
                         continue;
                     }
                     BlockPos offsetPos = rotorShaft.getPos().offset(value);
-                    Vec3i secondaryOffset = value.getDirectionVec().crossProduct(marchDirection.getDirectionVec());
+                    net.minecraft.util.math.vector.Vector3i secondaryOffset = value.getDirectionVec().crossProduct(marchDirection.getDirectionVec());
                     Direction secondaryDirection = Direction.getFacingFromVector(secondaryOffset.getX(), secondaryOffset.getY(), secondaryOffset.getZ());
                     BlockPos secondaryOffsetPos = offsetPos.offset(secondaryDirection);
                     
@@ -199,7 +200,7 @@ public class TurbineMultiblockController extends RectangularMultiblockController
         });
     }
     
-    private TurbineState turbineState = TurbineState.INACTIVE;
+    private TurbineActivity turbineActivity = TurbineActivity.INACTIVE;
     
     private final Set<TurbineTerminalTile> terminals = new HashSet<>();
     private final Set<TurbineCoolantPortTile> coolantPorts = new HashSet<>();
@@ -254,7 +255,7 @@ public class TurbineMultiblockController extends RectangularMultiblockController
     
     public void updateBlockStates() {
         terminals.forEach(terminal -> {
-            world.setBlockState(terminal.getPos(), terminal.getBlockState().with(TurbineState.TURBINE_STATE_ENUM_PROPERTY, turbineState));
+            world.setBlockState(terminal.getPos(), terminal.getBlockState().with(TurbineActivity.TURBINE_STATE_ENUM_PROPERTY, turbineActivity));
             terminal.markDirty();
         });
     }
@@ -370,7 +371,7 @@ public class TurbineMultiblockController extends RectangularMultiblockController
         
         long steamIn = 0;
         
-        if (turbineState == TurbineState.ACTIVE) {
+        if (turbineActivity == TurbineActivity.ACTIVE) {
             steamIn = Math.min(maxFloatRate, steam);
             
             if (ventState == VentState.CLOSED) {
@@ -419,7 +420,7 @@ public class TurbineMultiblockController extends RectangularMultiblockController
                 
                 // oh noes, there is a cap now, *no overspeeding your fucking turbines*
                 if (rotorSpeed > 2245) {
-                    efficiency = rotorSpeed / 4490;
+                    efficiency = -rotorSpeed / 4490;
                     efficiency += 1;
                 }
                 if (efficiency < 0) {
@@ -449,7 +450,7 @@ public class TurbineMultiblockController extends RectangularMultiblockController
                 fluidConsumedLastTick = steamIn;
                 steam -= steamIn;
                 
-                if (ventState != VentState.All) {
+                if (ventState != VentState.ALL) {
                     water += steamIn;
                 }
             }
@@ -482,11 +483,54 @@ public class TurbineMultiblockController extends RectangularMultiblockController
         markDirty();
     }
     
-    public void runRequest(String requestName, Object requestData) {
-    
+    public void updateDataPacket(TurbineState turbineState) {
+        turbineState.turbineActivity = turbineActivity;
+        turbineState.ventState = ventState;
+        turbineState.coilStatus = coilEngaged;
+        
+        turbineState.flowRate = maxFloatRate;
+        turbineState.efficiencyRate = rotorEfficiencyLastTick;
+        turbineState.turbineOutputRate = energyGeneratedLastTick;
+        
+        turbineState.currentRPM = (rotorBlades.size() > 0 && rotorMass > 0 ? rotorEnergy / (double) (rotorBlades.size() * rotorMass) : 0);
+        turbineState.maxRPM = 2200.0;
+        
+        turbineState.intakeStored = steam;
+        turbineState.intakeCapacity = Config.Turbine.TankSize;
+        
+        turbineState.exhaustStored = water;
+        turbineState.exhaustCapacity = Config.Turbine.TankSize;
+        
+        turbineState.energyStored = storedPower;
+        turbineState.energyCapacity = Config.Turbine.BatterySize;
     }
     
-    VentState ventState = VentState.CLOSED;
+    public void runRequest(String requestName, Object requestData) {
+        switch (requestName) {
+            case "setActive": {
+                boolean newState = (boolean) requestData;
+                setActive(newState ? TurbineActivity.ACTIVE : TurbineActivity.INACTIVE);
+                return;
+            }
+            case "setMaxFlowRate": {
+                long newRate = (long) requestData;
+                setMaxFlowRate(newRate);
+                return;
+            }
+            case "setCoilEngaged": {
+                boolean newState = (boolean) requestData;
+                setCoilEngaged(newState);
+                return;
+            }
+            case "setVentState": {
+                VentState newState = VentState.valueOf((int) requestData);
+                setVentState(newState);
+                return;
+            }
+        }
+    }
+    
+    VentState ventState = VentState.OVERFLOW;
     
     private void setVentState(VentState newVentState) {
         ventState = newVentState;
@@ -495,9 +539,13 @@ public class TurbineMultiblockController extends RectangularMultiblockController
     long maxFloatRate = Config.Turbine.MaxFlow;
     
     private void setMaxFlowRate(long flowRate) {
-        if (flowRate > 0 && flowRate < Config.Turbine.MaxFlow) {
-            maxFloatRate = flowRate;
+        if (flowRate < 0) {
+            flowRate = 0;
         }
+        if (flowRate > Config.Turbine.MaxFlow) {
+            flowRate = Config.Turbine.MaxFlow;
+        }
+        maxFloatRate = flowRate;
     }
     
     private boolean coilEngaged = true;
@@ -512,7 +560,7 @@ public class TurbineMultiblockController extends RectangularMultiblockController
         {
             compound.putLong("steam", steam);
             compound.putLong("water", water);
-            compound.putString("turbineState", turbineState.toString());
+            compound.putString("turbineState", turbineActivity.toString());
             compound.putDouble("storedPower", storedPower);
             compound.putString("ventState", ventState.toString());
             compound.putDouble("rotorEnergy", rotorEnergy);
@@ -530,7 +578,7 @@ public class TurbineMultiblockController extends RectangularMultiblockController
             water = compound.getLong("water");
         }
         if (compound.contains("turbineState")) {
-            turbineState = TurbineState.valueOf(compound.getString("turbineState").toUpperCase());
+            turbineActivity = TurbineActivity.valueOf(compound.getString("turbineState").toUpperCase());
         }
         if (compound.contains("storedPower")) {
             storedPower = compound.getLong("storedPower");
@@ -552,12 +600,12 @@ public class TurbineMultiblockController extends RectangularMultiblockController
     }
     
     public void toggleActive() {
-        setActive(turbineState == TurbineState.ACTIVE ? TurbineState.INACTIVE : TurbineState.ACTIVE);
+        setActive(turbineActivity == TurbineActivity.ACTIVE ? TurbineActivity.INACTIVE : TurbineActivity.ACTIVE);
     }
     
-    public void setActive(TurbineState newState) {
-        if (turbineState != newState) {
-            turbineState = newState;
+    public void setActive(TurbineActivity newState) {
+        if (turbineActivity != newState) {
+            turbineActivity = newState;
             updateBlockStates();
         }
     }
@@ -575,7 +623,7 @@ public class TurbineMultiblockController extends RectangularMultiblockController
                 "bladeDrag: " + bladeDrag + "\n" +
                 "CoilEngaged:" + coilEngaged + " \n" +
                 "VentState:" + ventState + " \n" +
-                "State:" + turbineState.toString() + " \n" +
+                "State:" + turbineActivity.toString() + " \n" +
                 "StoredPower: " + storedPower + "\n" +
                 "CoilEngaged: " + coilEngaged + " \n" +
                 "PowerProduction: " + energyGeneratedLastTick + "\n" +
@@ -583,6 +631,7 @@ public class TurbineMultiblockController extends RectangularMultiblockController
                 "Steam: " + steam + "\n" +
                 "Water: " + water + "\n" +
                 "Flow: " + fluidConsumedLastTick + "\n" +
+                "RotorEfficiency: " + rotorEfficiencyLastTick + "\n" +
                 "MaxFlow: " + maxFloatRate + "\n" +
                 "RotorRPM: " + (rotorBlades.size() > 0 && rotorMass > 0 ? rotorEnergy / (double) (rotorBlades.size() * rotorMass) : 0) + "\n" +
                 "";

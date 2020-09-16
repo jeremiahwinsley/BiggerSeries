@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -12,7 +13,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.roguelogix.biggerreactors.classic.turbine.blocks.TurbineCoolantPort;
-import net.roguelogix.biggerreactors.fluids.IrradiatedSteam;
+import net.roguelogix.biggerreactors.fluids.FluidIrradiatedSteam;
 import net.roguelogix.phosphophyllite.multiblock.generic.MultiblockController;
 import net.roguelogix.phosphophyllite.registry.RegisterTileEntity;
 
@@ -40,8 +41,10 @@ public class TurbineCoolantPortTile extends TurbineBaseTile implements IFluidHan
         return super.getCapability(cap, side);
     }
     
+    private static final ResourceLocation steamTagLocation = new ResourceLocation("forge:steam");
+    
     private final FluidStack water = new FluidStack(Fluids.WATER, 0);
-    private final FluidStack steam = new FluidStack(IrradiatedSteam.INSTANCE, 0);
+    private final FluidStack steam = new FluidStack(FluidIrradiatedSteam.INSTANCE, 0);
     
     @Override
     public int getTanks() {
@@ -70,7 +73,7 @@ public class TurbineCoolantPortTile extends TurbineBaseTile implements IFluidHan
         if (tank == 1 && stack.getRawFluid() == Fluids.WATER) {
             return true;
         }
-        return tank == 0 && stack.getRawFluid() == IrradiatedSteam.INSTANCE;
+        return tank == 0 && stack.getRawFluid().getTags().contains(steamTagLocation);
     }
     
     @Override
@@ -78,7 +81,7 @@ public class TurbineCoolantPortTile extends TurbineBaseTile implements IFluidHan
         if (direction == OUTLET) {
             return 0;
         }
-        if (resource.getFluid() != IrradiatedSteam.INSTANCE) {
+        if (!resource.getFluid().getTags().contains(steamTagLocation)) {
             return 0;
         }
         if (controller != null) {
@@ -90,7 +93,7 @@ public class TurbineCoolantPortTile extends TurbineBaseTile implements IFluidHan
     @Nonnull
     @Override
     public FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action) {
-        if (resource.getFluid() == IrradiatedSteam.INSTANCE) {
+        if (resource.getFluid() == FluidIrradiatedSteam.INSTANCE) {
             return drain(resource.getAmount(), action);
         }
         return FluidStack.EMPTY;
@@ -124,23 +127,17 @@ public class TurbineCoolantPortTile extends TurbineBaseTile implements IFluidHan
     public void updateOutputDirection() {
         if (controller.assemblyState() == MultiblockController.AssemblyState.DISASSEMBLED) {
             waterOutputDirection = null;
-        }
-        if (pos.getX() == controller.minX()) {
+        } else if (pos.getX() == controller.minX()) {
             waterOutputDirection = Direction.WEST;
-        }
-        if (pos.getX() == controller.maxX()) {
+        } else if (pos.getX() == controller.maxX()) {
             waterOutputDirection = Direction.EAST;
-        }
-        if (pos.getY() == controller.minY()) {
+        } else if (pos.getY() == controller.minY()) {
             waterOutputDirection = Direction.DOWN;
-        }
-        if (pos.getY() == controller.maxY()) {
+        } else if (pos.getY() == controller.maxY()) {
             waterOutputDirection = Direction.UP;
-        }
-        if (pos.getZ() == controller.minZ()) {
+        } else if (pos.getZ() == controller.minZ()) {
             waterOutputDirection = Direction.NORTH;
-        }
-        if (pos.getZ() == controller.maxZ()) {
+        } else if (pos.getZ() == controller.maxZ()) {
             waterOutputDirection = Direction.SOUTH;
         }
         neighborChanged();

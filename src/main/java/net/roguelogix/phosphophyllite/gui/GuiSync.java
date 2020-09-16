@@ -6,11 +6,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -33,10 +34,10 @@ public class GuiSync {
         
         
         /**
-         * DONT OVERRIDE THIS
+         * DO NOT OVERRIDE THIS METHOD!
          *
-         * @param requestName
-         * @param requestData
+         * @param requestName The request to make.
+         * @param requestData The payload to send.
          */
         default void runRequest(String requestName, Object requestData) {
             HashMap<String, Object> map = new HashMap<>();
@@ -112,13 +113,15 @@ public class GuiSync {
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals
     );
-
+    
     @OnModLoad
     public static void onModLoad() {
         INSTANCE.registerMessage(1, GUIPacketMessage.class, GuiSync::encodePacket, GuiSync::decodePacket, GuiSync::handler);
         MinecraftForge.EVENT_BUS.addListener(GuiSync::onContainerClose);
         MinecraftForge.EVENT_BUS.addListener(GuiSync::onContainerOpen);
-        MinecraftForge.EVENT_BUS.addListener(GuiSync::GuiOpenEvent);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            MinecraftForge.EVENT_BUS.addListener(GuiSync::GuiOpenEvent);
+        }
         Thread updateThread = new Thread(() -> {
             while (true) {
                 synchronized (GuiSync.class) {

@@ -13,7 +13,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.roguelogix.biggerreactors.classic.reactor.ReactorMultiblockController;
 import net.roguelogix.biggerreactors.classic.reactor.blocks.ReactorAccessPort;
-import net.roguelogix.biggerreactors.fluids.IrradiatedSteam;
+import net.roguelogix.biggerreactors.fluids.FluidIrradiatedSteam;
 import net.roguelogix.phosphophyllite.multiblock.generic.MultiblockController;
 import net.roguelogix.phosphophyllite.registry.RegisterTileEntity;
 
@@ -42,7 +42,7 @@ public class ReactorCoolantPortTile extends ReactorBaseTile implements IFluidHan
     }
     
     private final FluidStack water = new FluidStack(Fluids.WATER, 0);
-    private final FluidStack steam = new FluidStack(IrradiatedSteam.INSTANCE, 0);
+    private final FluidStack steam = new FluidStack(FluidIrradiatedSteam.INSTANCE, 0);
     
     @Override
     public int getTanks() {
@@ -71,7 +71,7 @@ public class ReactorCoolantPortTile extends ReactorBaseTile implements IFluidHan
         if (tank == 0 && stack.getRawFluid() == Fluids.WATER) {
             return true;
         }
-        return tank == 1 && stack.getRawFluid() == IrradiatedSteam.INSTANCE;
+        return tank == 1 && stack.getRawFluid() == FluidIrradiatedSteam.INSTANCE;
     }
     
     @Override
@@ -92,7 +92,7 @@ public class ReactorCoolantPortTile extends ReactorBaseTile implements IFluidHan
     @Nonnull
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
-        if (resource.getFluid() == IrradiatedSteam.INSTANCE) {
+        if (resource.getFluid() == FluidIrradiatedSteam.INSTANCE) {
             return drain(resource.getAmount(), action);
         }
         return FluidStack.EMPTY;
@@ -126,23 +126,17 @@ public class ReactorCoolantPortTile extends ReactorBaseTile implements IFluidHan
     public void updateOutputDirection() {
         if (controller.assemblyState() == MultiblockController.AssemblyState.DISASSEMBLED) {
             steamOutputDirection = null;
-        }
-        if (pos.getX() == controller.minX()) {
+        } else if (pos.getX() == controller.minX()) {
             steamOutputDirection = Direction.WEST;
-        }
-        if (pos.getX() == controller.maxX()) {
+        } else if (pos.getX() == controller.maxX()) {
             steamOutputDirection = Direction.EAST;
-        }
-        if (pos.getY() == controller.minY()) {
+        } else if (pos.getY() == controller.minY()) {
             steamOutputDirection = Direction.DOWN;
-        }
-        if (pos.getY() == controller.maxY()) {
+        } else if (pos.getY() == controller.maxY()) {
             steamOutputDirection = Direction.UP;
-        }
-        if (pos.getZ() == controller.minZ()) {
+        } else if (pos.getZ() == controller.minZ()) {
             steamOutputDirection = Direction.NORTH;
-        }
-        if (pos.getZ() == controller.maxZ()) {
+        } else if (pos.getZ() == controller.maxZ()) {
             steamOutputDirection = Direction.SOUTH;
         }
         neighborChanged();
