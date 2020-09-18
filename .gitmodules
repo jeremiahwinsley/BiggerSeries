@@ -1,0 +1,3 @@
+[submodule "Phosphophyllite/src/main/quartzpp/RogueLib"]
+	path = Phosphophyllite/src/main/quartzpp/RogueLib
+	url = https://github.com/RogueLogix/RogueLib/

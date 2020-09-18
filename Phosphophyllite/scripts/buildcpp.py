@@ -2,7 +2,7 @@ import os.path
 import sys
 
 if __name__ == '__main__':
-    os.chdir("../Phosphophyllite/src/main/quartzpp")
+    os.chdir("../src/main/quartzpp")
     if (os.path.exists("cmake-build-debug")):
         os.chdir("cmake-build-debug")
     else:
