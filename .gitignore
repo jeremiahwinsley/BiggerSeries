@@ -28,3 +28,4 @@ forge*changelog.txt
 /Phosphophyllite/src/main/quartzpp/cmake-build-release/
 /Phosphophyllite/src/main/java/net/roguelogix/phosphophyllite/quartz/client/gl45cpp/JNI.class
 /Phosphophyllite/src/main/resources/assets/phosphophyllite/libs
+Phosphophyllite/src/main/quartzpp/cmake-build-debug-remote-host/
