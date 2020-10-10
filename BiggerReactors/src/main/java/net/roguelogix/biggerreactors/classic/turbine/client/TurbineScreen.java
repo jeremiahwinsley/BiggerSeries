@@ -18,8 +18,6 @@ import net.roguelogix.biggerreactors.client.turbine.*;
 import net.roguelogix.biggerreactors.fluids.FluidIrradiatedSteam;
 import net.roguelogix.phosphophyllite.gui.client.GuiScreenBase;
 
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
-
 public class TurbineScreen extends GuiScreenBase<TurbineContainer> implements IHasContainer<TurbineContainer> {
     
     private TurbineState turbineState;
@@ -73,23 +71,74 @@ public class TurbineScreen extends GuiScreenBase<TurbineContainer> implements IH
         
         // Initialize turbine bar symbols.
         this.symbolTachometer = new GuiSymbol<>(this, 89, 5, 0, 32,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.tachometer").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.tachometer").getString());
         this.symbolIntakeTank = new GuiSymbol<>(this, 111, 5, 32, 32,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.intake_tank").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.intake_tank").getString());
         this.symbolExhaustTank = new GuiSymbol<>(this, 133, 5, 48, 32,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.exhaust_tank").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.exhaust_tank").getString());
         this.symbolEnergyTank = new GuiSymbol<>(this, 155, 5, 96, 32,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.energy_tank").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.energy_tank").getString());
         
         // Initialize turbine information symbols.
         this.symbolTachometerReadout = new GuiSymbol<>(this, 7, 18, 0, 32,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.tachometer").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.tachometer").getString());
         this.symbolTurbineOutput = new GuiSymbol<>(this, 7, 39, 80, 32,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.output").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.output").getString());
         this.symbolGovernor = new GuiSymbol<>(this, 7, 59, 112, 32,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.governor").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.governor").getString());
         this.symbolRotorEfficiency = new GuiSymbol<>(this, 7, 80, 16, 32,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.rotor_efficiency").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.turbine.rotor_efficiency").getString());
+    }
+    
+    /**
+     * Handle a key press.
+     *
+     * @param keyCode   The ASCII keycode for the press.
+     * @param scanCode  The scancode for the press.
+     * @param modifiers Any modifiers being held.
+     * @return Whether or not the press was consumed.
+     */
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        super.keyPressed(keyCode, scanCode, modifiers);
+        this.turbineFlowIncrease.keyPressed(keyCode, scanCode, modifiers);
+        this.turbineFlowDecrease.keyPressed(keyCode, scanCode, modifiers);
+        return true;
+    }
+    
+    /**
+     * Handle a mouse click.
+     *
+     * @param mouseX The mouse X position.
+     * @param mouseY The mouse Y position.
+     * @param button The mouse button pressed.
+     * @return Whether or not the press was consumed.
+     */
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
+        this.turbineActivityToggle.mouseClicked(mouseX, mouseY, button);
+        this.turbineVentStateToggle.mouseClicked(mouseX, mouseY, button);
+        this.turbineCoilToggle.mouseClicked(mouseX, mouseY, button);
+        this.turbineFlowIncrease.mouseClicked(mouseX, mouseY, button);
+        this.turbineFlowDecrease.mouseClicked(mouseX, mouseY, button);
+        return true;
+    }
+    
+    /**
+     * Handle a mouse release.
+     *
+     * @param mouseX The mouse X position.
+     * @param mouseY The mouse Y position.
+     * @param button The mouse button released.
+     * @return Whether or not the release was consumed.
+     */
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        super.mouseReleased(mouseX, mouseY, button);
+        this.turbineFlowIncrease.mouseReleased(mouseX, mouseY, button);
+        this.turbineFlowDecrease.mouseReleased(mouseX, mouseY, button);
+        return true;
     }
     
     /**
@@ -150,18 +199,11 @@ public class TurbineScreen extends GuiScreenBase<TurbineContainer> implements IH
         this.symbolTurbineOutput.drawTooltip(mStack, mouseX, mouseY);
         this.symbolGovernor.drawTooltip(mStack, mouseX, mouseY);
         this.symbolRotorEfficiency.drawTooltip(mStack, mouseX, mouseY);
-        
-        // Check for updateable elements.
-        this.turbineActivityToggle.doClick(mouseX, mouseY, GLFW_MOUSE_BUTTON_1);
-        this.turbineVentStateToggle.doClick(mouseX, mouseY, GLFW_MOUSE_BUTTON_1);
-        this.turbineCoilToggle.doClick(mouseX, mouseY, GLFW_MOUSE_BUTTON_1);
-        this.turbineFlowIncrease.doClick(mouseX, mouseY, GLFW_MOUSE_BUTTON_1);
-        this.turbineFlowDecrease.doClick(mouseX, mouseY, GLFW_MOUSE_BUTTON_1);
     }
     
     @Override
     public void drawGuiContainerForegroundLayer(MatrixStack mStack, int mouseX, int mouseY) {
-        this.font.drawString(mStack, new TranslationTextComponent("screen.biggerreactors.turbine_terminal").getUnformattedComponentText(), 8, 6, 4210752);
+        this.font.drawString(mStack, new TranslationTextComponent("screen.biggerreactors.turbine_terminal").getString(), 8, 6, 4210752);
         
         // Draw buttons.
         this.turbineActivityToggle.drawPart(mStack);
@@ -194,9 +236,9 @@ public class TurbineScreen extends GuiScreenBase<TurbineContainer> implements IH
         this.font.drawString(mStack, String.format("%d mB/t", turbineState.flowRate), 26, 63, 4210752);
         this.font.drawString(mStack, String.format("%.1f%%", turbineState.efficiencyRate * 100), 26, 84, 4210752);
         if (turbineState.turbineActivity == TurbineActivity.ACTIVE) {
-            this.font.drawString(mStack, new TranslationTextComponent("tooltip.biggerreactors.status.turbine.activity.online").getUnformattedComponentText(), 8, 103, 4210752);
+            this.font.drawString(mStack, new TranslationTextComponent("tooltip.biggerreactors.status.turbine.activity.online").getString(), 8, 103, 4210752);
         } else {
-            this.font.drawString(mStack, new TranslationTextComponent("tooltip.biggerreactors.status.turbine.activity.offline").getUnformattedComponentText(), 8, 103, 4210752);
+            this.font.drawString(mStack, new TranslationTextComponent("tooltip.biggerreactors.status.turbine.activity.offline").getString(), 8, 103, 4210752);
         }
     }
 }

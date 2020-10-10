@@ -22,8 +22,6 @@ import net.roguelogix.biggerreactors.client.reactor.*;
 import net.roguelogix.biggerreactors.fluids.FluidIrradiatedSteam;
 import net.roguelogix.phosphophyllite.gui.client.GuiScreenBase;
 
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
-
 @OnlyIn(Dist.CLIENT)
 public class ReactorScreen extends GuiScreenBase<ReactorContainer> implements IHasContainer<ReactorContainer> {
     
@@ -80,27 +78,59 @@ public class ReactorScreen extends GuiScreenBase<ReactorContainer> implements IH
         
         // Initialize reactor bar symbols.
         this.symbolFuelMix = new GuiSymbol<>(this, 89, 5, 96, 0,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.fuel_mix").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.fuel_mix").getString());
         this.symbolCaseHeat = new GuiSymbol<>(this, 111, 5, 112, 0,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.case_heat").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.case_heat").getString());
         this.symbolFuelHeat = new GuiSymbol<>(this, 133, 5, 128, 0,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.fuel_heat").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.fuel_heat").getString());
         this.symbolEnergyTank = new GuiSymbol<>(this, 155, 5, 144, 0,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.energy_tank").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.energy_tank").getString());
         this.symbolCoolantTank = new GuiSymbol<>(this, 133, 100, 16, 0,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.coolant_tank").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.coolant_tank").getString());
         this.symbolHotTank = new GuiSymbol<>(this, 155, 100, 32, 0,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.hot_tank").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.hot_tank").getString());
         
         // Initialize reactor information symbols.
         this.symbolReactorTemperature = new GuiSymbol<>(this, 7, 18, 0, 0,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.temperature").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.temperature").getString());
         this.symbolReactorOutput = new GuiSymbol<>(this, 7, 39, 48, 0,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.output").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.output").getString());
         this.symbolFuelConsumption = new GuiSymbol<>(this, 7, 59, 64, 0,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.fuel_consumption").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.fuel_consumption").getString());
         this.symbolFuelReactivity = new GuiSymbol<>(this, 7, 80, 80, 0,
-                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.fuel_reactivity").getUnformattedComponentText());
+                new TranslationTextComponent("tooltip.biggerreactors.symbols.reactor.fuel_reactivity").getString());
+    }
+    
+    /**
+     * Handle a mouse click.
+     *
+     * @param mouseX The mouse X position.
+     * @param mouseY The mouse Y position.
+     * @param button The mouse button pressed.
+     * @return Whether or not the press was consumed.
+     */
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
+        this.reactorActivityToggle.mouseClicked(mouseX, mouseY, button);
+        this.reactorAutoEjectToggle.mouseClicked(mouseX, mouseY, button);
+        this.reactorManualEject.mouseClicked(mouseX, mouseY, button);
+        return true;
+    }
+    
+    /**
+     * Handle a mouse release.
+     *
+     * @param mouseX The mouse X position.
+     * @param mouseY The mouse Y position.
+     * @param button The mouse button released.
+     * @return Whether or not the release was consumed.
+     */
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        super.mouseReleased(mouseX, mouseY, button);
+        this.reactorManualEject.mouseReleased(mouseX, mouseY, button);
+        return true;
     }
     
     /**
@@ -172,11 +202,6 @@ public class ReactorScreen extends GuiScreenBase<ReactorContainer> implements IH
         this.symbolReactorOutput.drawTooltip(mStack, mouseX, mouseY);
         this.symbolFuelConsumption.drawTooltip(mStack, mouseX, mouseY);
         this.symbolFuelReactivity.drawTooltip(mStack, mouseX, mouseY);
-        
-        // Check for updatable elements.
-        this.reactorActivityToggle.doClick(mouseX, mouseY, GLFW_MOUSE_BUTTON_1);
-        this.reactorAutoEjectToggle.doClick(mouseX, mouseY, GLFW_MOUSE_BUTTON_1);
-        this.reactorManualEject.doClick(mouseX, mouseY, GLFW_MOUSE_BUTTON_1);
     }
     
     /**
@@ -187,7 +212,7 @@ public class ReactorScreen extends GuiScreenBase<ReactorContainer> implements IH
      */
     @Override
     public void drawGuiContainerForegroundLayer(MatrixStack mStack, int mouseX, int mouseY) {
-        this.font.drawString(mStack, new TranslationTextComponent("screen.biggerreactors.reactor_terminal").getUnformattedComponentText(), 8, 6, 4210752);
+        this.font.drawString(mStack, new TranslationTextComponent("screen.biggerreactors.reactor_terminal").getString(), 8, 6, 4210752);
         
         // Draw buttons.
         this.reactorActivityToggle.drawPart(mStack);
@@ -230,9 +255,9 @@ public class ReactorScreen extends GuiScreenBase<ReactorContainer> implements IH
         this.font.drawString(mStack, String.format("%.3f mB/t", reactorState.fuelUsageRate), 26, 63, 4210752);
         this.font.drawString(mStack, String.format("%.1f%%", reactorState.reactivityRate * 100), 26, 84, 4210752);
         if (reactorState.reactorActivity == ReactorActivity.ACTIVE) {
-            this.font.drawString(mStack, new TranslationTextComponent("tooltip.biggerreactors.status.reactor.activity.online").getUnformattedComponentText(), 8, 103, 4210752);
+            this.font.drawString(mStack, new TranslationTextComponent("tooltip.biggerreactors.status.reactor.activity.online").getString(), 8, 103, 4210752);
         } else {
-            this.font.drawString(mStack, new TranslationTextComponent("tooltip.biggerreactors.status.reactor.activity.offline").getUnformattedComponentText(), 8, 103, 4210752);
+            this.font.drawString(mStack, new TranslationTextComponent("tooltip.biggerreactors.status.reactor.activity.offline").getString(), 8, 103, 4210752);
         }
     }
 }

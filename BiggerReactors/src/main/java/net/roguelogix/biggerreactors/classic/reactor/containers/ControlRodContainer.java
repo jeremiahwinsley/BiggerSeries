@@ -1,47 +1,46 @@
-package net.roguelogix.biggerreactors.classic.turbine.containers;
+package net.roguelogix.biggerreactors.classic.reactor.containers;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
-import net.roguelogix.biggerreactors.classic.turbine.blocks.TurbineTerminal;
-import net.roguelogix.biggerreactors.classic.turbine.tiles.TurbineTerminalTile;
+import net.roguelogix.biggerreactors.classic.reactor.blocks.ReactorControlRod;
+import net.roguelogix.biggerreactors.classic.reactor.tiles.ReactorControlRodTile;
 import net.roguelogix.phosphophyllite.gui.GuiSync;
 import net.roguelogix.phosphophyllite.registry.RegisterContainer;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
-@RegisterContainer(name = "turbine_terminal")
-public class TurbineContainer extends Container implements GuiSync.IGUIPacketProvider {
+@RegisterContainer(name = "reactor_control_rod")
+public class ControlRodContainer extends Container implements GuiSync.IGUIPacketProvider {
     
     @RegisterContainer.Instance
-    public static ContainerType<TurbineContainer> INSTANCE;
+    public static ContainerType<ControlRodContainer> INSTANCE;
     
     private PlayerEntity player;
-    private TurbineTerminalTile tileEntity;
+    private ReactorControlRodTile tileEntity;
     
-    public TurbineContainer(int windowId, BlockPos blockPos, PlayerEntity player) {
+    public ControlRodContainer(int windowId, BlockPos blockPos, PlayerEntity player) {
         super(INSTANCE, windowId);
         this.player = player;
-        this.tileEntity = (TurbineTerminalTile) player.world.getTileEntity(blockPos);
+        this.tileEntity = (ReactorControlRodTile) player.world.getTileEntity(blockPos);
         this.getGuiPacket();
     }
     
     /**
      * @return The current state of the machine.
      */
-    @Nullable
     @Override
     public GuiSync.IGUIPacket getGuiPacket() {
-        return this.tileEntity.turbineState;
+        return this.tileEntity.controlRodState;
     }
     
     @Override
-    public boolean canInteractWith(PlayerEntity player) {
+    public boolean canInteractWith(@Nonnull PlayerEntity player) {
         assert tileEntity.getWorld() != null;
         return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()),
-                player, TurbineTerminal.INSTANCE);
+                player, ReactorControlRod.INSTANCE);
     }
     
     @Override
